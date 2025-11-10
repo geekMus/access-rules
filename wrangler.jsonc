@@ -1,0 +1,15 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "access-rules", // 部署的 workers 名称
+	"main": "src/index.js",
+	"compatibility_date": "2025-11-09",
+	"observability": {
+		"enabled": true
+	},
+	"vars": {
+		// 设置的请求地址（必填）
+		"GET_URL": "",
+        // 正常状态码（可选），默认为:[200]。
+		"NORMAL_STATUS_CODES": "200,206"
+	}
+}
