@@ -18,7 +18,7 @@
 
 ## 部署
 
-将此仓库 src 目录下的 index.js 部署到 Cloudflare Workers 中即可。
+将此仓库下的 workers.js 部署到 Cloudflare Workers 中即可。
 
 
 

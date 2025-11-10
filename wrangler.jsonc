@@ -1,7 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "access-rules", // 部署的 workers 名称
-	"main": "src/index.js",
+	"main": "./workers.js",
 	"compatibility_date": "2025-11-09",
 	"observability": {
 		"enabled": true
