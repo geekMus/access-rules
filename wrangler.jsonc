@@ -10,6 +10,10 @@
 		// 设置的请求地址（必填）
 		"GET_URL": "",
         // 正常状态码（可选），默认为:[200]。
-		"NORMAL_STATUS_CODES": "200,206"
+		"NORMAL_STATUS_CODES": "",
+        // 强制预览类型（可选）  可选值来自 MIME 类型列表：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/MIME_types/Common_types
+        "FORCE_INLINE_TYPES": "",
+        // 强制下载类型（可选）
+        "FORCE_DOWNLOAD_TYPES": ""
 	}
 }
