@@ -167,3 +167,4 @@ dist
 .wrangler/
 .vscode/
 .dev.vars
+package-lock.json
