@@ -15,7 +15,7 @@ const NULL_BODY_STATUS_CODES = [101, 204, 205, 304];
 
 // 解析状态码字符串 (例如 "200,201,302")
 const parseNormalStatusCodes = (statusCodesStr) => {
-	if (!statusCodesStr) return [200];
+	if (!statusCodesStr) return [200, 206];
 	return statusCodesStr
 		.split(',')
 		.map((code) => parseInt(code.trim()))
@@ -66,7 +66,7 @@ const buildReq = (request, env) => {
 
 // 美观的错误页面
 const generateErrorPage = (statusCode, customMessage = null) => {
-	const msg = customMessage || (statusCode === 404 ? '抱歉，您请求的资源未找到。' : '请求的资源可能需要特殊权限才能访问，或者暂时不可用。');
+	const msg = customMessage || (statusCode === 404 ? '抱歉，您请求的资源未找到' : '请求的资源可能需要特殊权限才能访问，或者暂时不可用');
 
 	return new Response(
 		`<!DOCTYPE html>
@@ -99,8 +99,8 @@ const generateErrorPage = (statusCode, customMessage = null) => {
 		</head>
 		<body>
 			<div class="container">
-				<div class="status">${customMessage ? '!' : statusCode}</div>
 				<h1>${customMessage ? '配置错误' : '请求状态'}</h1>
+				<div class="status">${customMessage ? '!' : statusCode}</div>
 				<p>${msg}</p>
 			</div>
 		</body>
@@ -119,11 +119,11 @@ const getDisposition = (contentType, env) => {
 	contentType = contentType.toLowerCase();
 
 	// 从环境变量中动态加载强制规则
-	const forceInlineList = parseMimeList(env.FORCE_INLINE_TYPES);
+	const forcePreviewList = parseMimeList(env.FORCE_PREVIEW_TYPES);
 	const forceDownloadList = parseMimeList(env.FORCE_DOWNLOAD_TYPES);
 
 	// 1️⃣ 优先检查强制预览类型
-	if (forceInlineList.some((t) => contentType.includes(t))) return 'inline';
+	if (forcePreviewList.some((t) => contentType.includes(t))) return 'inline';
 
 	// 2️⃣ 优先检查强制下载类型
 	if (forceDownloadList.some((t) => contentType.includes(t))) return 'attachment';
@@ -145,12 +145,12 @@ const getDisposition = (contentType, env) => {
 
 const getResponse = async (request, env) => {
 	if (!env.GET_URL) {
-		return generateErrorPage(0, '未配置 GET_URL，请先配置环境变量。');
+		return generateErrorPage(0, '未配置 GET_URL，请先配置环境变量');
 	}
 
 	const normalStatusCodes = parseNormalStatusCodes(env.NORMAL_STATUS_CODES);
 	const reqData = buildReq(request, env);
-	if (!reqData) return generateErrorPage(0, '无法构建请求，请检查环境变量配置。');
+	if (!reqData) return generateErrorPage(0, '无法构建请求，请检查环境变量配置');
 
 	const { url, requestInit } = reqData;
 	const response = await fetch(url, requestInit);
@@ -163,8 +163,22 @@ const getResponse = async (request, env) => {
 		return generateErrorPage(response.status);
 	}
 
-	// 构建新响应
-	const newResponse = new Response(NULL_BODY_STATUS_CODES.includes(response.status) ? null : response.body, response);
+	// 🩹 修复：防止 response.body 流中断（视频下载不完整）
+	const headers = new Headers(response.headers);
+	headers.delete('Content-Encoding');
+	headers.delete('Transfer-Encoding');
+	headers.set('Cache-Control', 'no-transform');
+
+	if (request.headers.has('range')) {
+		headers.set('Accept-Ranges', 'bytes');
+	}
+
+	const body = NULL_BODY_STATUS_CODES.includes(response.status) ? null : response.body;
+	const newResponse = new Response(body, {
+		status: response.status,
+		statusText: response.statusText,
+		headers,
+	});
 
 	// 自动补充 charset
 	const contentType = newResponse.headers.get('Content-Type');

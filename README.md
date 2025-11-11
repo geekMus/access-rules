@@ -4,8 +4,6 @@
 
 本项目用于解决 Cloudflare R2 资源在访问文本文件时出现乱码的问题，以及针对其他文件访问后的默认行为不是自动下载而生的。
 
-
-
 ## 功能特点
 
 - 反向代理：将请求转发到指定的目标服务器。
@@ -13,17 +11,16 @@
 - 自动错误页面：对于非正常状态码，显示友好的错误页面。
 - 内容类型处理：根据内容类型决定是否内联显示或作为附件下载。
 
-
-
 ## 部署
 
 将此仓库下的 workers.js 部署到 Cloudflare Workers 中即可。
-
-
 
 ## 配置变量
 
 在部署时需要配置以下环境变量：
 
 - `GET_URL` (必需): 目标服务器地址。例如，你的 R2 存储桶中绑定的自定义域名。
-- ` NORMAL_STATUS_CODES` (可选): 正常状态码列表，以逗号分隔，默认为 `200`。
+- `NORMAL_STATUS_CODES` (可选): 正常状态码列表，以逗号分隔，默认为 `200, 206`。
+- `FORCE_PREVIEW_TYPES` (可选): 强制预览类型，希望所有文件都强制预览，则设置为 `/`。
+  可选值来自 MIME 类型列表：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/MIME_types/Common_types。
+- `FORCE_DOWNLOAD_TYPES` (可选): 强制下载类型。

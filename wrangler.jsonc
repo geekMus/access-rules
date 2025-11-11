@@ -6,14 +6,18 @@
 	"observability": {
 		"enabled": true
 	},
-	"vars": {
-		// 设置的请求地址（必填）
-		"GET_URL": "",
-        // 正常状态码（可选），默认为:[200]。
-		"NORMAL_STATUS_CODES": "",
-        // 强制预览类型（可选）  可选值来自 MIME 类型列表：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/MIME_types/Common_types
-        "FORCE_INLINE_TYPES": "",
-        // 强制下载类型（可选）
-        "FORCE_DOWNLOAD_TYPES": ""
-	}
+    // 默认生产环境变量
+	// "vars": {
+	// 	// 设置的请求地址（必填）
+	// 	"GET_URL": "",
+	// 	// 正常状态码（可选），默认为:[200,206]。一般不用改动，除非你有特殊需求。
+	// 	"NORMAL_STATUS_CODES": "",
+	// 	// 强制预览类型（可选）
+	// 	// 可选值来自 MIME 类型列表：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/MIME_types/Common_types
+	// 	// 希望所有文件都强制预览，则设置为 /
+	// 	"FORCE_PREVIEW_TYPES": "",
+	// 	// 强制下载类型（可选）
+	// 	"FORCE_DOWNLOAD_TYPES": ""
+	// },
+
 }
