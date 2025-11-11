@@ -22,5 +22,11 @@
 - `GET_URL` (必需): 目标服务器地址。例如，你的 R2 存储桶中绑定的自定义域名。
 - `NORMAL_STATUS_CODES` (可选): 正常状态码列表，以逗号分隔，默认为 `200, 206`。
 - `FORCE_PREVIEW_TYPES` (可选): 强制预览类型，希望所有文件都强制预览，则设置为 `/`。
-  可选值来自 MIME 类型列表：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/MIME_types/Common_types。
 - `FORCE_DOWNLOAD_TYPES` (可选): 强制下载类型。
+
+
+
+可选值来自 MIME 类型列表：https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Guides/MIME_types/Common_types。
+
+
+
